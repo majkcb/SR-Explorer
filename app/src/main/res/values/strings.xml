@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SR-Kodtest</string>
+    <string name="could_not_get_programs">Could not get programs</string>
+    <string name="program_title">Program Title</string>
+</resources>

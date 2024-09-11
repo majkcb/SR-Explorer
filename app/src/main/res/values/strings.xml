@@ -3,4 +3,5 @@
     <string name="could_not_get_programs">Could not get programs</string>
     <string name="program_title">Program Title</string>
     <string name="title">Sveriges Radio</string>
+    <string name="backward_arrow">Backward arrow</string>
 </resources>

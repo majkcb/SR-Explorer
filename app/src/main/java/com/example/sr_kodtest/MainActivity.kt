@@ -5,12 +5,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,6 +29,7 @@ import com.example.sr_kodtest.navigation.NavigationActions
 import com.example.sr_kodtest.navigation.NavigationDestination
 import com.example.sr_kodtest.program.ProgramDetailScreen
 import com.example.sr_kodtest.program.ProgramScreen
+import com.example.sr_kodtest.program.ProgramViewModel
 import com.example.sr_kodtest.ui.theme.SRKodtestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,12 +47,26 @@ class MainActivity : ComponentActivity() {
                     NavigationActions(navController)
                 }
 
+                var shouldShowBackButton by remember { mutableStateOf(false) }
+                var topBarTitle by remember { mutableStateOf(getString(R.string.title)) }
+
                 Scaffold(topBar = {
                     CenterAlignedTopAppBar(title = {
                         Text(
-                            stringResource(R.string.title),
-                            modifier = Modifier.padding(top = 16.dp)
+                            topBarTitle, modifier = Modifier.padding(top = 16.dp)
                         )
+                    }, navigationIcon = {
+                        if (shouldShowBackButton) {
+                            IconButton(onClick = {
+                                navController.popBackStack()
+                            }) {
+                                Icon(
+                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.backward_arrow),
+                                    tint = Color.Black
+                                )
+                            }
+                        }
                     })
                 }) { innerPadding ->
                     NavHost(
@@ -52,6 +75,8 @@ class MainActivity : ComponentActivity() {
                         Modifier.padding(innerPadding)
                     ) {
                         composable(NavigationDestination.ProgramScreen.route) {
+                            shouldShowBackButton = false
+                            topBarTitle = getString(R.string.title)
                             ProgramScreen(programViewModel = hiltViewModel(),
                                 navigateToDetailScreen = { programId ->
                                     navActions.navigateToDetailScreen(programId)
@@ -62,6 +87,13 @@ class MainActivity : ComponentActivity() {
                             val programId =
                                 backStackEntry.arguments?.getString("programId")?.toInt()
                             programId?.let {
+                                shouldShowBackButton = true
+
+                                val programViewModel: ProgramViewModel = hiltViewModel()
+
+                                val program = programViewModel.getProgramById(it)
+                                topBarTitle = program?.name ?: getString(R.string.title)
+
                                 ProgramDetailScreen(
                                     programViewModel = hiltViewModel(), programId = it
                                 )

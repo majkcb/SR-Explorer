@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.models
+package com.example.sr_kodtest.domain.models
 
 class Program(
     val id: Int?,

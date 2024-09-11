@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.sr_kodtest.R
-import com.example.sr_kodtest.models.Program
+import com.example.sr_kodtest.domain.models.Program
 import com.example.sr_kodtest.ui.theme.SRKodtestTheme
 
 @Composable

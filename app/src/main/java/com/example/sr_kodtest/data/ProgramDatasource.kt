@@ -3,8 +3,8 @@ package com.example.sr_kodtest.data
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.example.sr_kodtest.connection.ProgramDTO
-import com.example.sr_kodtest.connection.SRApi
+import com.example.sr_kodtest.data.connection.ProgramDTO
+import com.example.sr_kodtest.data.connection.SRApi
 import javax.inject.Inject
 import javax.inject.Singleton
 

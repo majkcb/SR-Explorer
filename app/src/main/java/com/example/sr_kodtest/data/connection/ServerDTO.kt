@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.connection
+package com.example.sr_kodtest.data.connection
 
 data class ProgramDTO(
     val id: Int,

@@ -25,8 +25,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sr_kodtest.navigation.NavigationActions
-import com.example.sr_kodtest.navigation.NavigationDestination
+import com.example.sr_kodtest.screens.navigation.NavigationActions
+import com.example.sr_kodtest.screens.navigation.NavigationDestination
 import com.example.sr_kodtest.screens.ProgramDetailScreen
 import com.example.sr_kodtest.screens.ProgramScreen
 import com.example.sr_kodtest.screens.ProgramViewModel

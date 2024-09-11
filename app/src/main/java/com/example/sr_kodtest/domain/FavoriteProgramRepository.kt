@@ -1,7 +1,7 @@
 package com.example.sr_kodtest.domain
 
-import com.example.sr_kodtest.roomDB.FavoriteProgram
-import com.example.sr_kodtest.roomDB.FavoriteProgramDAO
+import com.example.sr_kodtest.data.roomDB.FavoriteProgram
+import com.example.sr_kodtest.data.roomDB.FavoriteProgramDAO
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton

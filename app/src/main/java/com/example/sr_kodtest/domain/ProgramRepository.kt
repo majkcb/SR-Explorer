@@ -3,7 +3,7 @@ package com.example.sr_kodtest.domain
 import arrow.core.Either
 import com.example.sr_kodtest.R
 import com.example.sr_kodtest.data.ProgramDatasource
-import com.example.sr_kodtest.models.Program
+import com.example.sr_kodtest.domain.models.Program
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

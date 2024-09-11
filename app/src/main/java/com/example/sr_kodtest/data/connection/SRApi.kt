@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.connection
+package com.example.sr_kodtest.data.connection
 
 import retrofit2.http.GET
 

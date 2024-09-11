@@ -27,9 +27,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.sr_kodtest.navigation.NavigationActions
 import com.example.sr_kodtest.navigation.NavigationDestination
-import com.example.sr_kodtest.program.ProgramDetailScreen
-import com.example.sr_kodtest.program.ProgramScreen
-import com.example.sr_kodtest.program.ProgramViewModel
+import com.example.sr_kodtest.screens.ProgramDetailScreen
+import com.example.sr_kodtest.screens.ProgramScreen
+import com.example.sr_kodtest.screens.ProgramViewModel
 import com.example.sr_kodtest.ui.theme.SRKodtestTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
                             shouldShowBackButton = false
                             topBarTitle = getString(R.string.title)
                             ProgramScreen(programViewModel = hiltViewModel(),
+                                favoriteProgramViewModel = hiltViewModel(),
                                 navigateToDetailScreen = { programId ->
                                     navActions.navigateToDetailScreen(programId)
                                 })
@@ -95,7 +96,9 @@ class MainActivity : ComponentActivity() {
                                 topBarTitle = program?.name ?: getString(R.string.title)
 
                                 ProgramDetailScreen(
-                                    programViewModel = hiltViewModel(), programId = it
+                                    programViewModel = hiltViewModel(),
+                                    favoriteProgramViewModel = hiltViewModel(),
+                                    programId = it
                                 )
                             }
                         }

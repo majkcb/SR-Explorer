@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.program
+package com.example.sr_kodtest.screens
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel

@@ -27,7 +27,6 @@ class ProgramDatasourceImpl @Inject constructor(
             Log.d("Datasource", "Fetched programs: ${response.programs}")
             response.programs.right()
         } catch (e: Exception) {
-            Log.e("Error", "Network or server error occurred", e)
             ProgramDatasource.Errors.NetworkError.left()
         }
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.sr_kodtest.domain.ProgramRepository
 import com.example.sr_kodtest.models.Program
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,7 +23,7 @@ class ProgramViewModel @Inject constructor(
     val uiState: StateFlow<ProgramUiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _uiState.update { it.copy(isLoading = true) }
             programRepository.getPrograms().fold({ errorStringId ->
                 _uiState.update { it.copy(isLoading = false, errorMessage = errorStringId) }

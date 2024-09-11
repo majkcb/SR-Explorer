@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.program
+package com.example.sr_kodtest.screens
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -38,26 +38,41 @@ import com.example.sr_kodtest.ui.theme.SRKodtestTheme
 fun ProgramScreen(
     modifier: Modifier = Modifier,
     programViewModel: ProgramViewModel,
+    favoriteProgramViewModel: FavoriteProgramViewModel,
     navigateToDetailScreen: (Int) -> Unit
 ) {
     val state by programViewModel.uiState.collectAsState()
+    val favoritePrograms by favoriteProgramViewModel.favoritePrograms.collectAsState()
 
-    ProgramScreen(modifier = modifier,
+    // Separera gillade och ogillade program
+    val likedPrograms = state.programs.filter { program ->
+        favoritePrograms.any { it.programName== program.name }
+    }
+    val notLikedPrograms = state.programs.filterNot { program ->
+        favoritePrograms.any { it.programName == program.name }
+    }
+
+    ProgramScreen(
+        modifier = modifier,
         isLoading = state.isLoading,
-        state = state,
+        likedPrograms = likedPrograms,
+        notLikedPrograms = notLikedPrograms,
         selectProgram = { program ->
             program.id?.let { programId ->
                 navigateToDetailScreen(programId)
             }
-        })
+        }
+    )
 }
-
 
 @Composable
 fun ProgramScreen(
-    modifier: Modifier, isLoading: Boolean, state: ProgramUiState, selectProgram: (Program) -> Unit
+    modifier: Modifier,
+    isLoading: Boolean,
+    likedPrograms: List<Program>,
+    notLikedPrograms: List<Program>,
+    selectProgram: (Program) -> Unit
 ) {
-
     Column(
         modifier = modifier
             .background(color = MaterialTheme.colorScheme.surface)
@@ -76,20 +91,38 @@ fun ProgramScreen(
             CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
         } else {
             LazyColumn {
-                items(state.programs) { program ->
-                    program.broadcastinfo?.let {
-                        ProgramItem(programImage = program.programimage,
-                            name = program.name,
-                            broadCastInfo = it,
-                            selectProgram = { selectProgram(program) })
-                    }
+                // Visa gillade program
+                item {
+                    Text(text ="Liked", style = MaterialTheme.typography.bodyLarge)
+                }
+                items(likedPrograms) { program ->
+                    ProgramItem(
+                        programImage = program.programimage,
+                        name = program.name,
+                        broadCastInfo = program.broadcastinfo ?: "",
+                        selectProgram = { selectProgram(program) }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                // Visa ogillade program
+                item {
+                    Text(text = "Not liked", style = MaterialTheme.typography.bodyLarge)
+                }
+                items(notLikedPrograms) { program ->
+                    ProgramItem(
+                        programImage = program.programimage,
+                        name = program.name,
+                        broadCastInfo = program.broadcastinfo ?: "",
+                        selectProgram = { selectProgram(program) }
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
         }
-
     }
 }
+
 
 @Composable
 fun ProgramItem(
@@ -99,7 +132,8 @@ fun ProgramItem(
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
-        .clickable { selectProgram() }) {
+        .clickable { selectProgram() })
+    {
 
         AsyncImage(
             model = programImage,
@@ -138,17 +172,28 @@ fun ProgramItem(
 @Composable
 fun ProgramScreenPreview() {
     SRKodtestTheme {
-        val previewProgram = Program(
-            id = null,
-            name = "Program 1",
-            description = "Description 1",
-            programimage = "Image 1",
-            broadcastinfo = "Broadcast 1"
+        val previewProgramLiked = Program(
+            id = 1,
+            name = "Liked Program",
+            description = "Description of liked program",
+            programimage = "https://via.placeholder.com/150",
+            broadcastinfo = "Broadcast info for liked program"
         )
+
+        val previewProgramNotLiked = Program(
+            id = 2,
+            name = "Not Liked Program",
+            description = "Description of not liked program",
+            programimage = "https://via.placeholder.com/150",
+            broadcastinfo = "Broadcast info for not liked program"
+        )
+
         ProgramScreen(
-            modifier = Modifier, isLoading = false, selectProgram = {}, state = ProgramUiState(
-                programs = listOf(previewProgram), isLoading = false
-            )
+            modifier = Modifier,
+            isLoading = false,
+            likedPrograms = listOf(previewProgramLiked),
+            notLikedPrograms = listOf(previewProgramNotLiked),
+            selectProgram = {}
         )
     }
 }

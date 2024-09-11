@@ -1,6 +1,5 @@
 package com.example.sr_kodtest.data
 
-import android.util.Log
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
@@ -13,7 +12,6 @@ interface ProgramDatasource {
     suspend fun getPrograms(): Either<Errors, List<ProgramDTO>>
     sealed class Errors {
         data object NetworkError : Errors()
-        data object ServerError : Errors()
     }
 }
 
@@ -24,7 +22,6 @@ class ProgramDatasourceImpl @Inject constructor(
     override suspend fun getPrograms(): Either<ProgramDatasource.Errors, List<ProgramDTO>> {
         return try {
             val response = api.getPrograms()
-            Log.d("Datasource", "Fetched programs: ${response.programs}")
             response.programs.right()
         } catch (e: Exception) {
             ProgramDatasource.Errors.NetworkError.left()

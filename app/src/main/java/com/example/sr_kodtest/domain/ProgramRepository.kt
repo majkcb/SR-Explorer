@@ -19,6 +19,7 @@ class ProgramRepositoryImpl @Inject constructor(
         return@withContext programDatasource.getPrograms().map { program ->
             program.map {
                 Program(
+                    id = it.id,
                     name = it.name,
                     description = it.description,
                     programimage = it.programimage,

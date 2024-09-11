@@ -1,8 +1,8 @@
 package com.example.sr_kodtest.program
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -36,19 +36,28 @@ import com.example.sr_kodtest.ui.theme.SRKodtestTheme
 
 @Composable
 fun ProgramScreen(
-    modifier: Modifier = Modifier, programViewModel: ProgramViewModel
+    modifier: Modifier = Modifier,
+    programViewModel: ProgramViewModel,
+    navigateToDetailScreen: (Int) -> Unit
 ) {
     val state by programViewModel.uiState.collectAsState()
 
-    ProgramScreen(
-        modifier = modifier, isLoading = state.isLoading, state = state
-    )
+    ProgramScreen(modifier = modifier,
+        isLoading = state.isLoading,
+        state = state,
+        selectProgram = { program ->
+            program.id?.let { programId ->
+                navigateToDetailScreen(programId)
+            }
+        })
 }
+
 
 @Composable
 fun ProgramScreen(
-    modifier: Modifier, isLoading: Boolean, state: ProgramUiState
+    modifier: Modifier, isLoading: Boolean, state: ProgramUiState, selectProgram: (Program) -> Unit
 ) {
+
     Column(
         modifier = modifier
             .background(color = MaterialTheme.colorScheme.surface)
@@ -69,11 +78,10 @@ fun ProgramScreen(
             LazyColumn {
                 items(state.programs) { program ->
                     program.broadcastinfo?.let {
-                        ProgramItem(
-                            programImage = program.programimage,
+                        ProgramItem(programImage = program.programimage,
                             name = program.name,
-                            broadCastInfo = it
-                        )
+                            broadCastInfo = it,
+                            selectProgram = { selectProgram(program) })
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                 }
@@ -84,13 +92,14 @@ fun ProgramScreen(
 }
 
 @Composable
-fun ProgramItem(programImage: String, name: String, broadCastInfo: String) {
+fun ProgramItem(
+    programImage: String, name: String, broadCastInfo: String, selectProgram: () -> Unit
+) {
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
+    Row(modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
+        .clickable { selectProgram() }) {
 
         AsyncImage(
             model = programImage,
@@ -130,13 +139,14 @@ fun ProgramItem(programImage: String, name: String, broadCastInfo: String) {
 fun ProgramScreenPreview() {
     SRKodtestTheme {
         val previewProgram = Program(
+            id = null,
             name = "Program 1",
             description = "Description 1",
             programimage = "Image 1",
             broadcastinfo = "Broadcast 1"
         )
         ProgramScreen(
-            modifier = Modifier, isLoading = false, state = ProgramUiState(
+            modifier = Modifier, isLoading = false, selectProgram = {}, state = ProgramUiState(
                 programs = listOf(previewProgram), isLoading = false
             )
         )

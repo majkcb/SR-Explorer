@@ -20,15 +20,11 @@ object ProjectWideProvidingDI {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
+        val client = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
 
 
-        return Retrofit.Builder().baseUrl("https://api.sr.se/api/")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        return Retrofit.Builder().baseUrl("https://api.sr.se/api/").client(client)
+            .addConverterFactory(GsonConverterFactory.create()).build()
     }
 
     @Provides

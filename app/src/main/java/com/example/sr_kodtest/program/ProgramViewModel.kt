@@ -1,6 +1,5 @@
 package com.example.sr_kodtest.program
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,11 +23,8 @@ class ProgramViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            Log.d("ViewModel", "Fetching programs")
             _uiState.update { it.copy(isLoading = true) }
             programRepository.getPrograms().fold({ errorStringId ->
-                Log.d("ViewModel", "Error: $errorStringId")
-
                 _uiState.update { it.copy(isLoading = false, errorMessage = errorStringId) }
             }, { programs ->
                 _uiState.update {
@@ -40,16 +36,16 @@ class ProgramViewModel @Inject constructor(
         }
     }
 
-    fun clearErrorMessage() {
-        _uiState.update {
-            it.copy(errorMessage = null)
-        }
+    fun getProgramById(programId: Int): Program? {
+        return _uiState.value.programs.find { it.id == programId }
     }
+
 
 }
 
 data class ProgramUiState(
     val programs: List<Program> = emptyList(),
     val isLoading: Boolean = false,
+    val selectedProgram: Program? = null,
     @StringRes val errorMessage: Int? = null
 )

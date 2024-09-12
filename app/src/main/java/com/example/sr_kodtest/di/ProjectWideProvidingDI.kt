@@ -3,8 +3,8 @@ package com.example.sr_kodtest.di
 import android.content.Context
 import androidx.room.Room
 import com.example.sr_kodtest.data.connection.SRApi
-import com.example.sr_kodtest.data.roomDB.FavoriteProgramDB
 import com.example.sr_kodtest.data.roomDB.FavoriteProgramDAO
+import com.example.sr_kodtest.data.roomDB.FavoriteProgramDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

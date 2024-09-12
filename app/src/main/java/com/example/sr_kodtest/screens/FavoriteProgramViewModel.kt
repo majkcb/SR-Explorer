@@ -2,8 +2,8 @@ package com.example.sr_kodtest.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.sr_kodtest.domain.FavoriteProgramRepository
 import com.example.sr_kodtest.data.roomDB.FavoriteProgram
+import com.example.sr_kodtest.domain.FavoriteProgramRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

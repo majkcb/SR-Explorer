@@ -1,6 +1,5 @@
 package com.example.sr_kodtest.di
 
-import com.example.sr_kodtest.domain.FavoriteProgramRepository
 import com.example.sr_kodtest.domain.ProgramRepository
 import com.example.sr_kodtest.domain.ProgramRepositoryImpl
 import dagger.Binds

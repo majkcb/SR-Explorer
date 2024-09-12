@@ -44,31 +44,30 @@ fun ProgramScreen(
     val state by programViewModel.uiState.collectAsState()
     val favoritePrograms by favoriteProgramViewModel.favoritePrograms.collectAsState()
 
-    // Separera gillade och ogillade program
     val likedPrograms = state.programs.filter { program ->
-        favoritePrograms.any { it.programName== program.name }
+        favoritePrograms.any { it.programName == program.name }
     }
     val notLikedPrograms = state.programs.filterNot { program ->
         favoritePrograms.any { it.programName == program.name }
     }
 
-    ProgramScreen(
-        modifier = modifier,
+    ProgramScreen(modifier = modifier,
         isLoading = state.isLoading,
+        errorMessage = state.errorMessage,
         likedPrograms = likedPrograms,
         notLikedPrograms = notLikedPrograms,
         selectProgram = { program ->
             program.id?.let { programId ->
                 navigateToDetailScreen(programId)
             }
-        }
-    )
+        })
 }
 
 @Composable
 fun ProgramScreen(
     modifier: Modifier,
     isLoading: Boolean,
+    errorMessage: Int?,
     likedPrograms: List<Program>,
     notLikedPrograms: List<Program>,
     selectProgram: (Program) -> Unit
@@ -87,36 +86,48 @@ fun ProgramScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-        } else {
-            LazyColumn {
-                // Visa gillade program
-                item {
-                    Text(text ="Liked", style = MaterialTheme.typography.bodyLarge)
-                }
-                items(likedPrograms) { program ->
-                    ProgramItem(
-                        programImage = program.programimage,
-                        name = program.name,
-                        broadCastInfo = program.broadcastinfo ?: "",
-                        selectProgram = { selectProgram(program) }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+        when {
+            isLoading -> {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
 
-                // Visa ogillade program
-                item {
-                    Text(text = "Not liked", style = MaterialTheme.typography.bodyLarge)
-                }
-                items(notLikedPrograms) { program ->
-                    ProgramItem(
-                        programImage = program.programimage,
-                        name = program.name,
-                        broadCastInfo = program.broadcastinfo ?: "",
-                        selectProgram = { selectProgram(program) }
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+            errorMessage != null -> {
+                Text(
+                    text = stringResource(errorMessage),
+                    color = Color.Red,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
+
+            else -> {
+                LazyColumn {
+                    item {
+                        Text(
+                            text = stringResource(R.string.liked),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                    items(likedPrograms) { program ->
+                        ProgramItem(programImage = program.programimage,
+                            name = program.name,
+                            broadCastInfo = program.broadcastinfo ?: "",
+                            selectProgram = { selectProgram(program) })
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    item {
+                        Text(
+                            text = stringResource(R.string.not_liked),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                    items(notLikedPrograms) { program ->
+                        ProgramItem(programImage = program.programimage,
+                            name = program.name,
+                            broadCastInfo = program.broadcastinfo ?: "",
+                            selectProgram = { selectProgram(program) })
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
         }
@@ -132,8 +143,7 @@ fun ProgramItem(
     Row(modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp)
-        .clickable { selectProgram() })
-    {
+        .clickable { selectProgram() }) {
 
         AsyncImage(
             model = programImage,
@@ -188,12 +198,11 @@ fun ProgramScreenPreview() {
             broadcastinfo = "Broadcast info for not liked program"
         )
 
-        ProgramScreen(
-            modifier = Modifier,
+        ProgramScreen(modifier = Modifier,
             isLoading = false,
+            errorMessage = null,
             likedPrograms = listOf(previewProgramLiked),
             notLikedPrograms = listOf(previewProgramNotLiked),
-            selectProgram = {}
-        )
+            selectProgram = {})
     }
 }

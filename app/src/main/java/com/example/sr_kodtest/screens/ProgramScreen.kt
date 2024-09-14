@@ -107,13 +107,25 @@ fun ProgramScreen(
                             text = stringResource(R.string.liked),
                             style = MaterialTheme.typography.bodyLarge
                         )
-                    }
-                    items(likedPrograms) { program ->
-                        ProgramItem(programImage = program.programimage,
-                            name = program.name,
-                            broadCastInfo = program.broadcastinfo ?: "",
-                            selectProgram = { selectProgram(program) })
                         Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    if (likedPrograms.isEmpty()) {
+                        item {
+                            Text(
+                                text = stringResource(id = R.string.no_programs_found),
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    } else {
+                        items(likedPrograms) { program ->
+                            ProgramItem(programImage = program.programimage,
+                                name = program.name,
+                                broadCastInfo = program.broadcastinfo ?: "",
+                                selectProgram = { selectProgram(program) })
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
                     }
                     item {
                         Text(

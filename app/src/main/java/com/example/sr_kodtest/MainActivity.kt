@@ -58,7 +58,7 @@ class MainActivity : ComponentActivity() {
                     }, navigationIcon = {
                         if (shouldShowBackButton) {
                             IconButton(onClick = {
-                                navController.popBackStack()
+                                navController.navigateUp()
                             }) {
                                 Icon(
                                     Icons.AutoMirrored.Filled.ArrowBack,

@@ -12,6 +12,9 @@ interface ProgramDatasource {
     suspend fun getPrograms(): Either<Errors, List<ProgramDTO>>
     sealed class Errors {
         data object NetworkError : Errors()
+        data object ServerError : Errors()
+        data object TimeoutError : Errors()
+        data object InvalidResponse : Errors()
     }
 }
 
@@ -20,11 +23,16 @@ class ProgramDatasourceImpl @Inject constructor(
     private val api: SRApi
 ) : ProgramDatasource {
     override suspend fun getPrograms(): Either<ProgramDatasource.Errors, List<ProgramDTO>> {
-        return try {
-            val response = api.getPrograms()
-            response.programs.right()
-        } catch (e: Exception) {
-            ProgramDatasource.Errors.NetworkError.left()
+        val response = api.getPrograms()
+
+        return if (response.isSuccessful) {
+            response.body()?.programs?.right() ?: ProgramDatasource.Errors.InvalidResponse.left()
+        } else {
+            when (response.code()) {
+                500 -> ProgramDatasource.Errors.ServerError.left()
+                408 -> ProgramDatasource.Errors.TimeoutError.left()
+                else -> ProgramDatasource.Errors.NetworkError.left()
+            }
         }
     }
 }

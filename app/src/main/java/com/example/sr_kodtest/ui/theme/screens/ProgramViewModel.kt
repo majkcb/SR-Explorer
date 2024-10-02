@@ -1,8 +1,10 @@
-package com.example.sr_kodtest.screens
+package com.example.sr_kodtest.ui.theme.screens
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sr_kodtest.data.roomDB.FavoriteProgram
+import com.example.sr_kodtest.domain.FavoriteProgramRepository
 import com.example.sr_kodtest.domain.ProgramRepository
 import com.example.sr_kodtest.domain.models.Program
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProgramViewModel @Inject constructor(
-    private val programRepository: ProgramRepository
+    private val programRepository: ProgramRepository,
+    private val favoriteProgramRepository: FavoriteProgramRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProgramUiState())
@@ -35,18 +38,37 @@ class ProgramViewModel @Inject constructor(
                 }
             })
         }
+
+        viewModelScope.launch {
+            favoriteProgramRepository.getFavoritePrograms().collect { favorites ->
+                _uiState.update { currentState ->
+                    currentState.copy(favoritePrograms = favorites)
+                }
+            }
+        }
     }
 
     fun getProgramById(programId: Int): Program? {
         return _uiState.value.programs.find { it.id == programId }
     }
 
+    fun addFavoriteProgram(programName: String) {
+        viewModelScope.launch {
+            favoriteProgramRepository.addFavoriteProgram(programName)
+        }
+    }
 
+    fun deleteFavoriteProgram(programName: String) {
+        viewModelScope.launch {
+            favoriteProgramRepository.deleteFavoriteProgram(programName)
+        }
+    }
 }
 
 data class ProgramUiState(
     val programs: List<Program> = emptyList(),
     val isLoading: Boolean = false,
     val selectedProgram: Program? = null,
-    @StringRes val errorMessage: Int? = null
+    @StringRes val errorMessage: Int? = null,
+    val favoritePrograms: List<FavoriteProgram> = emptyList()
 )

@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.screens
+package com.example.sr_kodtest.ui.theme.screens
 
 import android.content.res.Configuration
 import android.widget.Toast
@@ -39,29 +39,30 @@ import com.example.sr_kodtest.ui.theme.SRKodtestTheme
 
 @Composable
 fun ProgramDetailScreen(
-    programViewModel: ProgramViewModel,
-    favoriteProgramViewModel: FavoriteProgramViewModel,
-    programId: Int
+    programId: Int, programViewModel: ProgramViewModel
 ) {
     val program = programViewModel.getProgramById(programId)
-    val favoritePrograms by favoriteProgramViewModel.favoritePrograms.collectAsState(initial = emptyList())
 
-    program?.let {
-        val isFavorite = favoritePrograms.any { fav -> fav.programName == it.name }
+    if (program != null) {
+        val state by programViewModel.uiState.collectAsState()
+        val isFavorite = state.favoritePrograms.any { fav -> fav.programName == program.name }
 
-        ProgramDetailContent(programImage = it.programimage,
-            name = it.name,
-            description = it.description,
+        ProgramDetailContent(programImage = program.programimage,
+            name = program.name,
+            description = program.description,
             isFavorite = isFavorite,
             onFavoriteToggle = { newIsFavorite ->
                 if (newIsFavorite) {
-                    favoriteProgramViewModel.addFavoriteProgram(it.name)
+                    programViewModel.addFavoriteProgram(program.name)
                 } else {
-                    favoriteProgramViewModel.deleteFavoriteProgram(it.name)
+                    programViewModel.deleteFavoriteProgram(program.name)
                 }
             })
+    } else {
+        Text(stringResource(R.string.program_not_found))
     }
 }
+
 
 @Composable
 fun ProgramDetailContent(

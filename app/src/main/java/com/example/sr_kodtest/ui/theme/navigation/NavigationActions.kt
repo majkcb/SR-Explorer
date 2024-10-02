@@ -1,4 +1,4 @@
-package com.example.sr_kodtest.screens.navigation
+package com.example.sr_kodtest.ui.theme.navigation
 
 import androidx.navigation.NavController
 

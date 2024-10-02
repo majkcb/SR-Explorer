@@ -25,12 +25,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sr_kodtest.screens.ProgramDetailScreen
-import com.example.sr_kodtest.screens.ProgramScreen
-import com.example.sr_kodtest.screens.ProgramViewModel
-import com.example.sr_kodtest.screens.navigation.NavigationActions
-import com.example.sr_kodtest.screens.navigation.NavigationDestination
 import com.example.sr_kodtest.ui.theme.SRKodtestTheme
+import com.example.sr_kodtest.ui.theme.navigation.NavigationActions
+import com.example.sr_kodtest.ui.theme.navigation.NavigationDestination
+import com.example.sr_kodtest.ui.theme.screens.ProgramDetailScreen
+import com.example.sr_kodtest.ui.theme.screens.ProgramScreen
+import com.example.sr_kodtest.ui.theme.screens.ProgramViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -78,7 +78,6 @@ class MainActivity : ComponentActivity() {
                             shouldShowBackButton = false
                             topBarTitle = getString(R.string.title)
                             ProgramScreen(programViewModel = hiltViewModel(),
-                                favoriteProgramViewModel = hiltViewModel(),
                                 navigateToDetailScreen = { programId ->
                                     navActions.navigateToDetailScreen(programId)
                                 })
@@ -96,9 +95,7 @@ class MainActivity : ComponentActivity() {
                                 topBarTitle = program?.name ?: getString(R.string.title)
 
                                 ProgramDetailScreen(
-                                    programViewModel = hiltViewModel(),
-                                    favoriteProgramViewModel = hiltViewModel(),
-                                    programId = it
+                                    programViewModel = hiltViewModel(), programId = it
                                 )
                             }
                         }

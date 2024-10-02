@@ -89,10 +89,7 @@ class MainActivity : ComponentActivity() {
                             programId?.let {
                                 shouldShowBackButton = true
 
-                                val programViewModel: ProgramViewModel = hiltViewModel()
-
-                                val program = programViewModel.getProgramById(it)
-                                topBarTitle = program?.name ?: getString(R.string.title)
+                                topBarTitle = getString(R.string.title)
 
                                 ProgramDetailScreen(
                                     programViewModel = hiltViewModel(), programId = it

@@ -49,7 +49,7 @@ object ProjectWideProvidingDI {
                 context.applicationContext,
                 FavoriteProgramDB::class.java,
                 "favoriteProgram_database"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
         }
 
         @Provides

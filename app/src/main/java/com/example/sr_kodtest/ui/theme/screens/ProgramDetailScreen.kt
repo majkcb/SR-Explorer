@@ -45,7 +45,7 @@ fun ProgramDetailScreen(
 
     if (program != null) {
         val state by programViewModel.uiState.collectAsState()
-        val isFavorite = state.favoritePrograms.any { fav -> fav.programName == program.name }
+        val isFavorite = state.favoritePrograms.any { fav -> fav.programId == program.id }
 
         ProgramDetailContent(programImage = program.programimage,
             name = program.name,
@@ -53,9 +53,9 @@ fun ProgramDetailScreen(
             isFavorite = isFavorite,
             onFavoriteToggle = { newIsFavorite ->
                 if (newIsFavorite) {
-                    programViewModel.addFavoriteProgram(program.name)
+                    program.id?.let { programViewModel.addFavoriteProgram(it) }
                 } else {
-                    programViewModel.deleteFavoriteProgram(program.name)
+                    program.id?.let { programViewModel.deleteFavoriteProgram(it) }
                 }
             })
     } else {

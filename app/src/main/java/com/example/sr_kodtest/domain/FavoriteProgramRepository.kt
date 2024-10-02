@@ -10,12 +10,12 @@ import javax.inject.Singleton
 class FavoriteProgramRepository @Inject constructor(
     private val favoriteProgramDAO: FavoriteProgramDAO
 ) {
-    suspend fun addFavoriteProgram(programName: String) {
-        favoriteProgramDAO.addFavoriteProgram(FavoriteProgram(programName))
+    suspend fun addFavoriteProgram(programId: Int) {
+        favoriteProgramDAO.addFavoriteProgram(FavoriteProgram(programId))
     }
 
-    suspend fun deleteFavoriteProgram(programName: String) {
-        favoriteProgramDAO.deleteFavoriteProgram(programName)
+    suspend fun deleteFavoriteProgram(programId: Int) {
+        favoriteProgramDAO.deleteFavoriteProgram(programId)
     }
 
     fun getFavoritePrograms(): Flow<List<FavoriteProgram>> {

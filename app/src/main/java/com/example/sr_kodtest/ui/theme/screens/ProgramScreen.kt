@@ -33,10 +33,10 @@ fun ProgramScreen(
     val state by programViewModel.uiState.collectAsState()
 
     val likedPrograms = state.programs.filter { program ->
-        state.favoritePrograms.any { it.programName == program.name }
+        state.favoritePrograms.any { it.programId == program.id }
     }
     val notLikedPrograms = state.programs.filterNot { program ->
-        state.favoritePrograms.any { it.programName == program.name }
+        state.favoritePrograms.any { it.programId == program.id }
     }
 
     ProgramScreenContent(modifier = modifier,

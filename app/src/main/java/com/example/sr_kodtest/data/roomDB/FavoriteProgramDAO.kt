@@ -14,7 +14,7 @@ interface FavoriteProgramDAO {
     @Query("SELECT * FROM favorites")
     fun getFavoritePrograms(): Flow<List<FavoriteProgram>>
 
-    @Query("DELETE FROM favorites WHERE programName = :programName")
-    suspend fun deleteFavoriteProgram(programName: String)
+    @Query("DELETE FROM favorites WHERE programId = :programId")
+    suspend fun deleteFavoriteProgram(programId: Int)
 
 }

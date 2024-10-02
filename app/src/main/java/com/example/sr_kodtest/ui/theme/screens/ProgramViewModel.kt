@@ -52,15 +52,15 @@ class ProgramViewModel @Inject constructor(
         return _uiState.value.programs.find { it.id == programId }
     }
 
-    fun addFavoriteProgram(programName: String) {
+    fun addFavoriteProgram(programId: Int) {
         viewModelScope.launch {
-            favoriteProgramRepository.addFavoriteProgram(programName)
+            favoriteProgramRepository.addFavoriteProgram(programId)
         }
     }
 
-    fun deleteFavoriteProgram(programName: String) {
+    fun deleteFavoriteProgram(programId: Int) {
         viewModelScope.launch {
-            favoriteProgramRepository.deleteFavoriteProgram(programName)
+            favoriteProgramRepository.deleteFavoriteProgram(programId)
         }
     }
 }

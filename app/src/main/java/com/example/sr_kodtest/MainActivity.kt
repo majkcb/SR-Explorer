@@ -30,7 +30,6 @@ import com.example.sr_kodtest.ui.theme.navigation.NavigationActions
 import com.example.sr_kodtest.ui.theme.navigation.NavigationDestination
 import com.example.sr_kodtest.ui.theme.screens.ProgramDetailScreen
 import com.example.sr_kodtest.ui.theme.screens.ProgramScreen
-import com.example.sr_kodtest.ui.theme.screens.ProgramViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -91,8 +90,9 @@ class MainActivity : ComponentActivity() {
 
                                 topBarTitle = getString(R.string.title)
 
+                                val parentEntry = navController.getBackStackEntry(NavigationDestination.ProgramScreen.route)
                                 ProgramDetailScreen(
-                                    programViewModel = hiltViewModel(), programId = it
+                                    programViewModel = hiltViewModel(parentEntry), programId = it
                                 )
                             }
                         }

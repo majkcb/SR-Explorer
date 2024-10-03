@@ -90,7 +90,8 @@ class MainActivity : ComponentActivity() {
 
                                 topBarTitle = getString(R.string.title)
 
-                                val parentEntry = navController.getBackStackEntry(NavigationDestination.ProgramScreen.route)
+                                val parentEntry =
+                                    navController.getBackStackEntry(NavigationDestination.ProgramScreen.route)
                                 ProgramDetailScreen(
                                     programViewModel = hiltViewModel(parentEntry), programId = it
                                 )
